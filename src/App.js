@@ -1,9 +1,23 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   const names = ['Rahman', 'Akram', 'Mojo']
+
+  const students = [
+    {id:'01', name: 'Farha', roll: 110},
+    {id:'02', name: 'Wadud', roll: 111},
+    {id:'03', name: 'Mofiz', roll: 112}
+  ]
+
+  const [persons, setPersons] = useState([])
+  useEffect(()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setPersons(data))
+  }, [])
+
   return (
     <div className="App">
       <div>
@@ -16,23 +30,54 @@ function App() {
         <Abc name={names[2]} words="50"></Abc>
         <Abc></Abc>
       </div>
+  
+      {
+        students.map(student => <Student nameOfStudent={student.name} rollOfStudent={student.roll} key={student.id}></Student>)
+      }
 
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+      {
+        persons.map(person => <Person name={person.name} email={person.email} phone={person.phone} key={person.id}></Person>)
+      }
     </div>
   );
 }
 
 function Abc(props) {
   const abcStyle = {
-    border: '2px solid red',
-    margin: '5px' 
+    border: '5px solid red',
+    margin: '20px' 
   }
   return (
     <div style={abcStyle}>
       <h3>I am ABC-{props.name}</h3>
       <p>I am normal text with "{props.words || 10}" words</p>
+    </div>
+  )
+}
+
+function Student(props) {
+  const studentStyle = {
+    border: '5px solid green',
+    margin: '20px' 
+  }
+  return (
+    <div style={studentStyle}>
+      <h3>Student name-{props.nameOfStudent}</h3>
+      <p>Student Roll : {props.rollOfStudent}</p>
+    </div>
+  )
+}
+
+function Person(props) {
+  const personStyle = {
+    border: '5px solid orange',
+    margin: '20px' 
+  }
+  return(
+    <div style={personStyle}>
+      <h3>Person name is: {props.name}</h3>
+      <p>Person's email id is: {props.email}</p>
+      <p>Person's phone number is: {props.phone}</p>
     </div>
   )
 }
